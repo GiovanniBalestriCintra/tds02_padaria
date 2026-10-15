@@ -6,6 +6,9 @@ namespace backPadaria
     {
         static void Main(string[] args)
         {
+
+            Banco.connectAndTest();
+
             try
             {
                 Cliente cliente1 = new Cliente(
