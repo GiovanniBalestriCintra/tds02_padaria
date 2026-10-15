@@ -7,21 +7,35 @@ namespace backPadaria
         static void Main(string[] args)
         {
 
-            Banco.connectAndTest();
+            Console.WriteLine("Digite o nome do cliente: ");
+            string nomeCliente = Console.ReadLine();
 
-            try
-            {
-                Cliente cliente1 = new Cliente(
-                nome: "",
-                cpf: "1234",
-                telefone: "1111",
-                endereco: "Rua rua",
-                pontos: 123);
-            }
-            catch (Exception err) 
-            {
-                Console.WriteLine(err.Message);          
-            }
+            Console.WriteLine("Digite o cpf do cliente: ");
+            string cpfCliente = Console.ReadLine();
+
+            Console.WriteLine("Digite o telefone do cliente: ");
+            string telefoneCliente = Console.ReadLine();
+
+            Console.WriteLine("Digite o endereco do cliente: ");
+            string enderecoCliente = Console.ReadLine();
+
+            Console.WriteLine("Digite a quantidade de pontos: ");
+            int pontosCliente = int.Parse(Console.ReadLine());
+
+
+
+            // Refatoração //
+            Cliente cliente1 = new Cliente(
+                   nome: nomeCliente,
+                   cpf: cpfCliente,
+                   telefone: telefoneCliente,
+                   endereco: enderecoCliente,
+                   pontos: pontosCliente
+               );
+
+            Cliente.inserir(cliente1);
+
+          
             
             
 
