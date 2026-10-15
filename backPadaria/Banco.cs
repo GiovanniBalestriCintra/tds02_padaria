@@ -40,6 +40,8 @@ namespace backPadaria
                 {
                     Console.WriteLine("Erro ao conectar no banco de dados");
                     Console.WriteLine(ex.Message);
+
+                    Console.WriteLine("giovanni");
                 }
 
             }
