@@ -38,6 +38,12 @@ namespace backPadaria.Model
             this.Pontos = pontos;
         }
 
+        // Gambiarra para testar
+        public Cliente(int id)
+        {
+            this.Id = id;
+        }
+
 
         public Cliente(string nome, string cpf, string telefone, string endereco, int pontos)
         {
@@ -84,5 +90,78 @@ namespace backPadaria.Model
             }
         }
 
+        public static int Deletar(Cliente cliente)
+        {
+            // String SQL
+            string sql = "DELETE FROM `Cliente` WHERE `ID` = @id";
+
+            using (var cmd = new MySqlCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@id", cliente.id);
+
+                return Banco.executarComando(cmd);
+            }
+        }
+
+        public static List<Cliente> ListarTodos()
+        {
+            string sql = "SELECT * FROM `Cliente`";
+
+            List<Cliente> listaClientes = new();
+
+            using (var cmd = new MySqlCommand(sql))
+            {
+
+                // Executa a leitura. 0 bloco 'using' aqui e FUNDAMENTAL para garantir que o
+                // reader seja fechado no final, o que por sua vez fecha a conexao com o banco.
+                using (MySqlDataReader reader = Banco.executarComRetornoDeDados(cmd))
+                {
+
+                    // O while vai rodar uma vez para CADA Linha que existir na tabela Cliente
+                    while (reader.Read())
+                    {
+
+                        int id = reader.GetInt32("id");
+
+                        string nome = ValidarCampo(reader["Nome"]);
+                        string cpf = ValidarCampo(reader["Cpf"]);
+                        string telefone = ValidarCampo(reader["Telefone"]);
+                        string endereco = ValidarCampo(reader["Endereco"]);
+
+                        int pontos = reader.GetInt32("Pontos");
+
+                        // Cria o objeto Cliente con os dados extraidos
+                        Cliente cliente = new Cliente(id, nome, cpf, telefone, endereco, pontos);
+
+                        // Adiciona este cliente à nossa lista
+                        listaClientes.Add(cliente);
+
+                    }
+
+                }
+
+                // Retorna a lista completa (se a tabela estiver vazia, retorna uma lista con 0 itens)
+                return listaClientes;
+
+            }
+
+        }
+
+        private static string ValidarCampo(object campo)
+        {
+
+            if(campo == DBNull.Value || campo == null)
+            {
+                return "";
+            }
+            else
+            {
+                return campo.ToString();
+            }
+
+
+        }
+
     }
+
 }
