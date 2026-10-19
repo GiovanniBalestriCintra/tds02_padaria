@@ -93,24 +93,40 @@ namespace backPadaria
             //}
 
 
-            Cliente? meuCliente = Cliente.listarPorId(1);
-
-            if(meuCliente != null)
-            {
-                meuCliente.Endereco = "Rua das ruas";
-                meuCliente.Telefone = "1199999-9999";
-
-                int resultado = Cliente.Atualizar(meuCliente);
-
-                if (resultado > 0)
-                {
-                    Console.WriteLine("Cliente atualizado com sucesso.");
-                }
+            // ------------------------------------------------------------ //
 
 
-            }
+            //Cliente? meuCliente = Cliente.ListarPorId(1);
+
+            //if(meuCliente != null)
+            //{
+            //    meuCliente.Endereco = "Rua das ruas";
+            //    meuCliente.Telefone = "1199999-9999";
+
+            //    int resultado = Cliente.Atualizar(meuCliente);
+
+            //    if (resultado > 0)
+            //    {
+            //        Console.WriteLine("Cliente atualizado com sucesso.");
+            //    }
 
 
+            //}
+
+
+            // ------------------------------------------------------------ //
+
+
+            //Funcionario funcionario1 = new Funcionario(
+            //    nome: "Erick",
+            //    cpf: "123.456.789-00",
+            //    cargo: "Padeiro"
+            //);
+
+            //Funcionario.Inserir(funcionario1);
+
+
+            Funcionario.Deletar(3);
 
 
         }

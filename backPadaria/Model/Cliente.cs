@@ -61,7 +61,7 @@ namespace backPadaria.Model
         }
 
 
-        public static int inserir(Cliente cliente)
+        public static int Inserir(Cliente cliente)
         {
             // Instrução SQL: Define o comando de inserção (INSERT).
             // 0 uso de marcações com '0' (ex: ONone) é una pratica de segurança crucial chanada de "Paranetrização".
@@ -86,7 +86,7 @@ namespace backPadaria.Model
                 // ele envia o comando configurado para o metodo generico 'executarComando' da classe 'Banco'.
                 // O metodo retorna 1 (se o usuario for inserido con sucesso) ou -1 (se houver erro no banco).
 
-                return Banco.executarComando(cmd);
+                return Banco.ExecutarComando(cmd);
             }
         }
 
@@ -99,7 +99,7 @@ namespace backPadaria.Model
             {
                 cmd.Parameters.AddWithValue("@id", cliente.id);
 
-                return Banco.executarComando(cmd);
+                return Banco.ExecutarComando(cmd);
             }
         }
 
@@ -114,7 +114,7 @@ namespace backPadaria.Model
 
                 // Executa a leitura. 0 bloco 'using' aqui e FUNDAMENTAL para garantir que o
                 // reader seja fechado no final, o que por sua vez fecha a conexao com o banco.
-                using (MySqlDataReader reader = Banco.executarComRetornoDeDados(cmd))
+                using (MySqlDataReader reader = Banco.ExecutarComRetornoDeDados(cmd))
                 {
 
                     // O while vai rodar uma vez para CADA Linha que existir na tabela Cliente
@@ -149,7 +149,7 @@ namespace backPadaria.Model
         }
 
 
-        public static Cliente? listarPorId(int id)
+        public static Cliente? ListarPorId(int id)
         {
             string sql = "SELECT * FROM `Cliente` WHERE `id` = @Id";
 
@@ -157,7 +157,7 @@ namespace backPadaria.Model
             {
                 cmd.Parameters.AddWithValue("@Id", id);
 
-                MySqlDataReader reader = Banco.executarComRetornoDeDados(cmd);
+                MySqlDataReader reader = Banco.ExecutarComRetornoDeDados(cmd);
 
                 Cliente cliente = null;
 
@@ -201,7 +201,7 @@ namespace backPadaria.Model
 
                 // Execução: 0 UPOATE tambén é uma instrução de ação (cono INSERT e DELETE).
                 // Ele vai retornar 1 (se encontrou o ID e atualizou con sucesso) ou 0 (se o ID nao existia).
-                return Banco.executarComando(cmd);
+                return Banco.ExecutarComando(cmd);
 
             }
         }

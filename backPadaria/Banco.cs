@@ -15,7 +15,7 @@ namespace backPadaria
         private static string stringConexao = "Server=10.91.45.43;Port=3306;Database=padaria_bd;Uid=admin;Pwd=12345678";
 
 
-        public static void connectAndTest()
+        public static void ConnectAndTest()
         {
             using (var connection = new MySqlConnection(stringConexao))
             {
@@ -50,7 +50,7 @@ namespace backPadaria
 
         /* Declaração do método: público e estatico, retorna um número inteiro (linhas afetadas)
          e recebe um objeto MysqlCommand com a intrução SQL já confirmada como parâmetro. */
-        public static int executarComando(MySqlCommand command)
+        public static int ExecutarComando(MySqlCommand command)
         {
            /* O bloco 'using' garante que a conexao sera automaticanente fechada e Liberada
            da memória ao final do bloco, mesmo que ocorram erros no meio do processo. 
@@ -88,7 +88,7 @@ namespace backPadaria
         // Declaração do metodo: publico e estatico, prjetado especificamente para executar comandos
         // (geralmente INSERTs seguidos de SELECT LAST_INSERT_ID()) e retornar o ID gerado pelo banco.
 
-        public static int executarComandoComRetornoId(MySqlCommand command)
+        public static int ExecutarComandoComRetornoId(MySqlCommand command)
         {
             using (var conexao = new MySqlConnection(stringConexao))
             {
@@ -134,7 +134,7 @@ namespace backPadaria
 
         // Metodo central para executar comandos de consulta (SELECT) no banco de dados.
         // Ele retorna um MySqLDataReader, que e uma especie de "ponteiro" para ler os dados linha por linha.
-        public static MySqlDataReader executarComRetornoDeDados(MySqlCommand command)
+        public static MySqlDataReader ExecutarComRetornoDeDados(MySqlCommand command)
         {
 
             // Cria a conexão com o banco.
