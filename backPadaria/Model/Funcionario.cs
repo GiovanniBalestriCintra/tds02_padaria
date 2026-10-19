@@ -98,6 +98,7 @@ namespace backPadaria.Model
             {
                 // Executa a leitura. 0 bloco 'using' aqui e FUNDAMENTAL para garantir que o
                 // reader seja fechado no final, o que por sua vez fecha a conexao com o banco.
+
                 using (MySqlDataReader reader = Banco.ExecutarComRetornoDeDados(cmd))
                 {
                     // O while vai rodar uma vez para CADA Linha que existir na tabela Cliente
