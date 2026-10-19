@@ -50,24 +50,65 @@ namespace backPadaria
             // ------------------------------------------------------------ //
 
 
-            List<Cliente> clientes = Cliente.ListarTodos();
+            //List<Cliente> clientes = Cliente.ListarTodos();
 
-            foreach(Cliente cliente in clientes )
+            //foreach(Cliente cliente in clientes )
+            //{
+            //    Console.WriteLine($"ID: {cliente.Id}");
+            //    Console.WriteLine($"Nome: {cliente.Nome}");
+            //    Console.WriteLine($"CPF: {cliente.Cpf}");
+            //    Console.WriteLine($"Telefone: {cliente.Telefone}");
+            //    Console.WriteLine($"Endereço: {cliente.Endereco}");
+            //    Console.WriteLine($"Pontos: {cliente.Pontos}");
+
+            //    Console.WriteLine("-----------------------------------");
+
+
+            //}
+
+
+            // ------------------------------------------------------------ //
+
+
+
+            //Cliente? cli01 = Cliente.listarPorId(1);
+
+            //if(cli01 != null)
+            //{
+            //    Console.WriteLine("-----------------------------------");
+
+            //    Console.WriteLine($"ID: {cli01.Id}");
+            //    Console.WriteLine($"Nome: {cli01.Nome}");
+            //    Console.WriteLine($"CPF: {cli01.Cpf}");
+            //    Console.WriteLine($"Telefone: {cli01.Telefone}");
+            //    Console.WriteLine($"Endereço: {cli01.Endereco}");
+            //    Console.WriteLine($"Pontos: {cli01.Pontos}");
+
+            //    Console.WriteLine("-----------------------------------");
+
+            //}
+            //else
+            //{
+            //    Console.WriteLine("O cliente não foi encontrado");
+            //}
+
+
+            Cliente? meuCliente = Cliente.listarPorId(1);
+
+            if(meuCliente != null)
             {
-                Console.WriteLine($"ID: {cliente.Id}");
-                Console.WriteLine($"Nome: {cliente.Nome}");
-                Console.WriteLine($"CPF: {cliente.Cpf}");
-                Console.WriteLine($"Telefone: {cliente.Telefone}");
-                Console.WriteLine($"Endereço: {cliente.Endereco}");
-                Console.WriteLine($"Pontos: {cliente.Pontos}");
+                meuCliente.Endereco = "Rua das ruas";
+                meuCliente.Telefone = "1199999-9999";
 
-                Console.WriteLine("-----------------------------------");
-            
+                int resultado = Cliente.Atualizar(meuCliente);
+
+                if (resultado > 0)
+                {
+                    Console.WriteLine("Cliente atualizado com sucesso.");
+                }
+
 
             }
-
-
-
 
 
 
