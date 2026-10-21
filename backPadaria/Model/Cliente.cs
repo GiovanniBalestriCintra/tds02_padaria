@@ -175,7 +175,7 @@ namespace backPadaria.Model
                     int pontos = reader.GetInt32("Pontos");
 
                     // Cria o objeto Cliente con os dados extraidos
-                    cliente = new Cliente(id, nome, cpf, telefone, endereco, pontos);
+                    cliente = new Cliente(idBanco, nome, cpf, telefone, endereco, pontos);
                 }
 
                 return cliente;

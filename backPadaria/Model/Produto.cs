@@ -149,7 +149,7 @@ namespace backPadaria.Model
                 {
 
                     // Extrai os dados da linha atual.
-                    int idBanco = reader.GetInt32("Id");
+                    int idProduto = reader.GetInt32("Id");
                     string nome = ValidarCampo(reader["Nome"]);
                     decimal preco = reader.GetDecimal("Preco");
                     string categoria = ValidarCampo(reader["Categoria"]);
@@ -157,7 +157,7 @@ namespace backPadaria.Model
                     int marcaId = reader.GetInt32("MarcaId");
 
                     // Cria o objeto Cliente con os dados extraidos
-                    produto = new Produto(id, nome, preco, categoria, fabricado, marcaId);
+                    produto = new Produto(idProduto, nome, preco, categoria, fabricado, marcaId);
                 }
 
                 return produto;

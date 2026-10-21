@@ -130,13 +130,12 @@ namespace backPadaria.Model
                 {
 
                     // Extrai os dados da linha atual.
-                    int idBanco = reader.GetInt32("id");
-
+                    int idMarca = reader.GetInt32("id");
                     string nome = ValidarCampo(reader["Nome"]);
                     string telefone = ValidarCampo(reader["Telefone"]);
 
                     // Cria o objeto Cliente con os dados extraidos
-                    marca = new Marca(id, nome, telefone);
+                    marca = new Marca(idMarca, nome, telefone);
                 }
 
                 return marca;
