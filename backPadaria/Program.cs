@@ -1,4 +1,5 @@
 ﻿using backPadaria.Model;
+using backPadaria.Service;
 
 namespace backPadaria
 {
@@ -126,7 +127,9 @@ namespace backPadaria
             //Funcionario.Inserir(funcionario1);
 
 
-            Funcionario.Deletar(3);
+            ClienteService.MenuCliente();
+
+           
 
 
         }

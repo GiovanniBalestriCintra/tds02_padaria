@@ -207,10 +207,6 @@ namespace backPadaria.Model
         }
         
 
-
-
-
-
         private static string ValidarCampo(object campo)
         {
 
