@@ -60,7 +60,7 @@ namespace backPadaria.Service
                             break;
 
                         case "6": // VisualizarPontuação
-                            VisualizarPontuaçãoMenu();
+                            VisualizarPontuaçãoClienteMenu();
                             break;
 
                     }
