@@ -218,10 +218,6 @@ namespace backPadaria.Model
             {
                 return campo.ToString();
 
-
-
-
-
             }
 
 

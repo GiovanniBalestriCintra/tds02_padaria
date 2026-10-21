@@ -56,13 +56,13 @@ namespace backPadaria.Model
 
         }
 
-        public static int Deletar(int id)
+        public static int Deletar(Funcionario funcionario)
         {
             string sql = "DELETE FROM `Funcionario` WHERE `id` = @Id";
 
             using (var cmd = new MySqlCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@id", funcionario.id);
 
                 return Banco.ExecutarComando(cmd);
             }

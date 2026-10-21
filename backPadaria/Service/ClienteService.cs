@@ -18,7 +18,7 @@ namespace backPadaria.Service
 
             while (!sair)
             {
-                Console.WriteLine("===== GESTÃO DE CLIENTES =====");
+                Console.WriteLine("----- GESTÃO DE CLIENTES -----");
 
                 Console.WriteLine("1 - Cadastrar Cliente");
                 Console.WriteLine("2 - Listar Todos os Clientes");
@@ -28,7 +28,7 @@ namespace backPadaria.Service
                 Console.WriteLine("6 - Visualizar Pontuação");
                 Console.WriteLine("0 - Sair do Programa");
 
-                Console.WriteLine("==============================");
+                Console.WriteLine("------------------------------");
                 Console.WriteLine("Digite uma opção: ");
 
                 string opcao = Console.ReadLine();
@@ -60,7 +60,7 @@ namespace backPadaria.Service
                             break;
 
                         case "6": // VisualizarPontuação
-                            VisualizarPontuaçãoClienteMenu();
+                            ExibirPotuacaoClienteMenu();
                             break;
 
                     }
@@ -121,7 +121,10 @@ namespace backPadaria.Service
             {
                 foreach (var cliente in lista)
                 {
-                    Console.WriteLine($"ID: {cliente.Id} | Nome: {cliente.Nome} | CPF: {cliente.Cpf} | Pontos: {cliente.Pontos} ");
+                    Console.WriteLine($"ID: {cliente.Id} ");
+                    Console.WriteLine($"Nome: {cliente.Nome}");
+                    Console.WriteLine($"CPF: {cliente.Cpf}");
+                    Console.WriteLine($"Pontos: {cliente.Pontos}");
                 }
             }
 
@@ -175,7 +178,7 @@ namespace backPadaria.Service
             if (clienteParaAtualizar != null)
             {
                 Console.WriteLine($"Atualizar dados de {clienteParaAtualizar.Nome}");
-                Console.WriteLine("Pressione ENTER sem digitar nada para manter os dados atual ");
+                Console.WriteLine("Pressione ENTER sem digitar nada para manter os dados atuais ");
                 Console.WriteLine($"Novo Endereço: Atual ({clienteParaAtualizar.Endereco} )");
 
                 string novoEndereco = Console.ReadLine();
@@ -194,7 +197,9 @@ namespace backPadaria.Service
                 Console.WriteLine("Cliente não encontrado");
             }
 
+            Console.WriteLine("\nPressione uma tecla para continuar...");
             Console.ReadKey();
+            Console.Clear();
 
         } // FIM ATUALIZAR CLIENTE
 
