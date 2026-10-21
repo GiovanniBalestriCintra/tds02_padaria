@@ -22,6 +22,14 @@ namespace backPadaria.Model
         public string Cargo { get => cargo; set => cargo = value; }
 
 
+        public Funcionario(int id, string nome, string cpf, string cargo)
+        {
+            this.id = id;
+            this.nome = nome;
+            this.cpf = cpf;
+            this.cargo = cargo;
+        }
+
         public Funcionario(string nome, string cpf, string cargo)
         {
             this.nome = nome;
