@@ -12,229 +12,322 @@ namespace backPadaria.Service
 
         public static void MenuProduto()
         {
-
             bool sair = false;
-
             while (!sair)
             {
-                Console.WriteLine("----- GESTÃO DE PRODUTOS -----");
-
+                Console.Clear();
+                Console.WriteLine("===== GESTÃO DE PRODUTOS ===== ");
                 Console.WriteLine("1 - Cadastrar Produto");
                 Console.WriteLine("2 - Listar Todos os Produtos");
-                Console.WriteLine("3 - Buscar Produto por Id");
+                Console.WriteLine("3 - Buscar Produto por ID");
                 Console.WriteLine("4 - Atualizar Produto");
                 Console.WriteLine("5 - Excluir Produto");
-                Console.WriteLine("0 - Sair");
+                Console.WriteLine("0 - Sair do Programa");
 
-                Console.WriteLine("------------------------------");
-                Console.WriteLine("Digite uma opção: ");
+                Console.WriteLine(" =============================");
+                Console.Write("Digite uma opção: ");
 
                 string opcao = Console.ReadLine();
                 Console.Clear();
-
 
                 try
                 {
                     switch (opcao)
                     {
-                        case "1": // Cadastrar
-                            CadastrarProdutoMenu();
-                            break;
-
-                        case "2": // Listar
-                            ListarprodutosMenu();
-                            break;
-
-                        case "3": // Buscar
-                            BuscarProdutoPorIdMenu();
-                            break;
-
-                        case "4": // Atualizar
-                            AtualizarProdutoMenu();
-                            break;
-
-                        case "5": // Excluir
-                            ExcluirProdutoMenu();
-                            break;
+                        case "1":
+                            CadastrarProduto(); break;
+                        case "2":
+                            ListarProdutos(); break;
+                        case "3":
+                            ListarProdutoPorId(); break;
+                        case "4":
+                            AtualizarProduto(); break;
+                        case "5":
+                            DeletarProduto(); break;
+                        case "0":
+                            sair = true;
+                            Console.WriteLine("Encerrando o programa..."); break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"\n[ERRO DE VALIDAÇÃO]: {ex.Message}");
+                    Console.WriteLine(ex.ToString());
                 }
             }
-
         }
 
-
-        private static void CadastrarProdutoMenu()
+        private static void CadastrarProduto()
         {
-            Console.WriteLine("----- CADASTRAR PRODUTO -----");
+            Console.WriteLine("-=-=-=-=-=- CADASTRAR PRODUTO -=-=-=-=-=-");
+            Console.Write("Digite o Nome do produto: ");
+            string nomeProduto = Console.ReadLine()!;
 
-            Console.WriteLine("Digite o nome do Produto: ");
-            string nomeProduto = Console.ReadLine();
+            Console.Write("Digite o Preco do produto: ");
+            decimal precoProduto = decimal.Parse(Console.ReadLine()!);
 
-            Console.WriteLine("Digite o preço do Produto: ");
-            decimal.TryParse(Console.ReadLine(), out decimal precoProduto);
+            Console.Write("Digite a Categoria do produto: ");
+            string categoriaProduto = Console.ReadLine()!;
 
-            Console.WriteLine("Digite a categoria do Produto: ");
-            string categoriaProduto = Console.ReadLine();
+            Console.Write("Digite se o Produto foi Fabricado (true/false): ");
+            bool fabricadoProduto = bool.Parse(Console.ReadLine()!);
 
-            Console.WriteLine("O Produto é fabricado? (true/False): ");
-            bool fabricadoProduto = bool.Parse(Console.ReadLine());
+            Console.Write("Digite o [ID] da marca: ");
+            int idmarca = int.Parse(Console.ReadLine()!);
 
-            Console.WriteLine("Digite o ID da marca desse Produto: ");
-            int.TryParse(Console.ReadLine(), out int idMarca);
+            Produto novoProduto = new Produto(nome: nomeProduto, preco: precoProduto, categoria: categoriaProduto, fabricado: fabricadoProduto, marcaId: idmarca
+            );
 
-
-            Produto novoProduto = new Produto(nome: nomeProduto, preco: precoProduto, categoria: categoriaProduto, fabricado: fabricadoProduto, marcaId: idMarca);
-
-            int resultadoDoInsert = Produto.Inserir(novoProduto);
+            int resultadoInsert = Produto.Inserir(novoProduto);
             Console.Clear();
 
-            if (resultadoDoInsert > 0)
-            {
-                Console.WriteLine("Produto cadastrado com sucesso. ");
-            }
-
+            if (resultadoInsert > 0)
+                Console.WriteLine($"Produto cadastrado com sucesso!!");
+            VoltarParaOMenu();
         }
-
-        private static void ListarprodutosMenu()
+        private static void ListarProdutos()
         {
-
-            Console.WriteLine("----- LISTA DE PRODUTOS -----");
+            Console.WriteLine("------ LISTA DE PRODUTOS ------");
 
             List<Produto> lista = Produto.ListarTodos();
 
             if (lista.Count == 0)
             {
-                Console.WriteLine("Nenhum produto cadastrado no sistema.");
+                Console.WriteLine("Nenhum produto cadastrado no sistema!");
             }
+
             else
             {
-                foreach (var produto in lista)
+                Console.WriteLine("----------------------------------------------------------------\n");
+                foreach (var p in lista)
                 {
-                    Console.WriteLine($"ID: {produto.Id} ");
-                    Console.WriteLine($"Nome: {produto.Nome}");
-                    Console.WriteLine($"Preco: {produto.Preco}");
-                    Console.WriteLine($"Categoria: {produto.Categoria}");
-                    Console.WriteLine($"Fabricado: {produto.Fabricado}");
-                    Console.WriteLine($"MarcaId: {produto.MarcaId}");
+                    Console.WriteLine($"ID: {p.Id} | Nome: {p.Nome} | Preco: {p.Preco} | Categoria: {p.Categoria} | Fabricado: {p.Fabricado} | Marca: {p.MarcaId}");
+                    Console.WriteLine("\n----------------------------------------------------------------");
                 }
             }
 
-            Console.WriteLine("\nPressione uma tecla para continuar...");
-            Console.ReadKey();
-            Console.Clear();
+            VoltarParaOMenu();
+        }
+        private static void ListarProdutoPorId()
+        {
+            int idProduto;
+            Produto? produto = null;
 
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("------ BUSCAR PRODUTO POR ID ------");
+                Console.Write("\nDigite o [ID] (ou 0 para sair): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idProduto))
+                {
+                    Console.WriteLine("\n[ERROR] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o início do while
+                }
+
+                // Permite ao usuário desistir e voltar ao menu
+                if (idProduto == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                produto = Produto.ListarPorId(idProduto);
+
+                if (produto == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhum produto encontrado com esse ID no sistema!");
+                    PressionarParaTentarNovamente();
+                    // Como fornecedor continua null, o loop continuará
+                }
+
+                Console.WriteLine($"ID: {produto.Id} | Nome: {produto.Nome} | Preco: {produto.Preco} | Categoria: {produto.Categoria} | Fabricado: {produto.Fabricado} | MarcaId: {produto.MarcaId}");
+
+                Console.WriteLine("\n--------------------------------");
+                Console.WriteLine("1 - Buscar outro Produto");
+                Console.WriteLine("0 - Voltar ao menu principal");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine()!;
+
+                if (opcao == "0")
+                {
+                    VoltarParaOMenu();
+                    return; // Sai do método e encerra
+                }
+                // Se digitar qualquer outra coisa ou "1", o loop `while (true)` roda de novo e limpa a tela para a próxima busca!
+            }
+        }
+        private static void AtualizarProduto()
+        {
+            int idProduto;
+            Produto? produto = null;
+
+            // Loop que continuará rodando enquanto a marca não for encontrada
+            while (produto == null)
+            {
+                Console.Clear();
+                Console.WriteLine("------ ATUALIZAR PRODUTO ------");
+                Console.Write("Digite o [ID] (ou 0 para sair): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idProduto))
+                {
+                    Console.WriteLine("\n[ERROR] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o início do while
+                }
+
+                // Permite ao usuário desistir e voltar ao menu
+                if (idProduto == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                produto = Produto.ListarPorId(idProduto);
+
+                if (produto == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhum produto encontrado com esse ID no sistema!");
+                    PressionarParaTentarNovamente();
+                    // Como marca continua null, o loop continuará
+                }
+            }
+
+            // Se chegou aqui, a marca foi encontrada com sucesso!
+            Console.WriteLine($"ID: {produto.Id} | Nome: {produto.Nome} | Preco: {produto.Preco} | Categoria: {produto.Categoria} | Fabricado: {produto.Fabricado} | MarcaId: {produto.MarcaId}");
+
+            Console.WriteLine("\n-- O QUE VOCÊ DESEJA ALTERAR? --");
+            Console.WriteLine("1 - Nome do Produto");
+            Console.WriteLine("2 - Preco do Produto");
+            Console.WriteLine("3 - Categoria do Produto");
+            Console.WriteLine("4 - Status do Produto Fabricado");
+            Console.WriteLine("5 - Marca do Produto");
+            Console.WriteLine("0 - Cancelar");
+            Console.Write("Escolha uma opção: ");
+
+            string opcao = Console.ReadLine()!;
+            bool alterado = true;
+
+            switch (opcao)
+            {
+                case "1":
+                    Console.Write("Novo Nome: ");
+                    produto.Nome = Console.ReadLine()!;
+                    break;
+
+                case "2":
+                    Console.Write("Novo Preco: ");
+                    produto.Preco = decimal.Parse(Console.ReadLine()!);
+                    break;
+
+                case "3":
+                    Console.Write("Nova Categoria: ");
+                    produto.Categoria = Console.ReadLine()!;
+                    break;
+
+                case "4":
+                    Console.Write("Novo status de Fabricação (true/false): ");
+                    produto.Fabricado = bool.Parse(Console.ReadLine()!);
+                    break;
+
+                case "5":
+                    Console.Write("Nova marca do Produto [IDMARCA]: ");
+                    produto.MarcaId = int.Parse(Console.ReadLine()!);
+                    break;
+
+                case "0":
+                    Console.WriteLine("Operação cancelada.");
+                    alterado = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Opção inválida!");
+                    alterado = false;
+                    break;
+            }
+
+            if (alterado)
+            {
+                int resultado = Produto.Atualizar(produto);
+
+                if (resultado > 0)
+                    Console.WriteLine("\nProduto atualizado com sucesso!");
+                else
+                    Console.WriteLine("\nErro ao atualizar o produto no banco de dados.");
+            }
+
+            VoltarParaOMenu();
+        }
+        private static void DeletarProduto()
+        {
+            int idProduto;
+            Produto? produto = null;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("------ EXCLUINDO PRODUTO ------");
+                Console.Write("\nDigite o [ID] (ou 0 para cancelar): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idProduto))
+                {
+                    Console.WriteLine("\n[ERRO] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o topo do loop
+                }
+
+                if (idProduto == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                produto = Produto.ListarPorId(idProduto);
+
+                if (produto == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhum produto encontrado no sistema!");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o topo do loop
+                }
+
+                Console.WriteLine($"\nProduto encontrado: ID: {produto.Id} | Nome: {produto.Nome}");
+                Console.Write("\nTem certeza que deseja excluir este fornecedor? (S/N): ");
+                //Trim remove espaços e ToUpper joga tudo pra maiuscula
+                string confirmacao = Console.ReadLine()!.Trim().ToUpper();
+
+                if (confirmacao == "S")
+                {
+                    Produto.Deletar(produto);
+                    Console.WriteLine("\nProduto excluído com sucesso!");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("\nExclusão cancelada pelo usuário.");
+                    PressionarParaTentarNovamente();
+                }
+            }
+
+            VoltarParaOMenu();
         }
 
-        public static void BuscarProdutoPorIdMenu()
+        //Perfumaria
+        private static void VoltarParaOMenu()
         {
-
-            Console.WriteLine("----- BUSCAR PRODUTO POR ID -----");
-
-            int.TryParse(Console.ReadLine(), out int idProduto);
-
-            Produto produto = Produto.ListarPorId(idProduto);
-
-            if (idProduto != null)
-            {
-                Console.WriteLine($"ID: {produto.Id} ");
-                Console.WriteLine($"Nome: {produto.Nome}");
-                Console.WriteLine($"Preco: {produto.Preco}");
-                Console.WriteLine($"Categoria: {produto.Categoria}");
-                Console.WriteLine($"Fabricado: {produto.Fabricado}");
-                Console.WriteLine($"MarcaId: {produto.MarcaId}");
-            }
-            else
-            {
-                Console.WriteLine("Produto não encontrado. ");
-            }
-
-            Console.WriteLine("\nPressione uma tecla para continuar...");
+            Console.Write("\nPressione qualquer tecla para voltar ao menu principal:");
             Console.ReadKey();
             Console.Clear();
-
         }
 
-
-
-        private static void AtualizarProdutoMenu()
+        // Método auxiliar apenas para pausar antes de limpar a tela no loop
+        private static void PressionarParaTentarNovamente()
         {
-            Console.WriteLine("----- ATUALIZAR PRODUTO POR ID -----");
-            Console.WriteLine("Digite o id do produto que deseja atualizar: ");
-
-            int idBusca = 0;
-            int.TryParse(Console.ReadLine(), out idBusca);
-            Console.WriteLine($"-------> {idBusca}");
-
-            Produto produtoParaAtualizar = Produto.ListarPorId(idBusca);
-
-            if (produtoParaAtualizar != null)
-            {
-                Console.WriteLine($"Atualizar dados de {produtoParaAtualizar.Nome}");
-                Console.WriteLine("Pressione ENTER sem digitar nada para manter os dados atuais ");
-
-                Console.WriteLine($"Novo Preço: Atual ({produtoParaAtualizar.Preco} )");
-                string novoPreco = Console.ReadLine();
-                if (decimal.TryParse(novoPreco, out decimal preco)) produtoParaAtualizar.Preco = preco;
-
-                Console.WriteLine($"Nova Categoria: Atual ({produtoParaAtualizar.Categoria}) ");
-                string? novaCategoria = Console.ReadLine();
-                if (string.IsNullOrEmpty(novaCategoria)) produtoParaAtualizar.Categoria = novaCategoria;
-               
-                Console.WriteLine($"Novo Fabricado: Atual ({produtoParaAtualizar.Fabricado}) ");
-                string? novoFabricado = Console.ReadLine();
-                if (bool.TryParse(novoFabricado, out bool fabricado)) produtoParaAtualizar.Fabricado = fabricado;
-
-                Console.WriteLine($"Nova MarcaId: Atual ({produtoParaAtualizar.MarcaId}) ");
-                string? novaMarcaId = Console.ReadLine();
-                if (int.TryParse(novaMarcaId, out int marcaId)) produtoParaAtualizar.MarcaId = marcaId;
-
-
-                int resultadoAtualizacao = Produto.Atualizar(produtoParaAtualizar);
-                if (resultadoAtualizacao > 0) Console.WriteLine("Produto atualizado com sucesso! ");
-
-            }
-            else
-            {
-                Console.WriteLine("Produto não encontrado");
-            }
-
-            Console.WriteLine("\nPressione uma tecla para continuar...");
+            Console.Write("\nPressione qualquer tecla para tentar novamente...");
             Console.ReadKey();
-            Console.Clear();
-
-        } // FIM ATUALIZAR CLIENTE
-
-
-        private static void ExcluirProdutoMenu()
-        {
-
-            Console.WriteLine("----- EXCLUIR PRODUTO POR ID -----");
-            Console.WriteLine("Digite o id do produto que deseja excluir");
-
-            int idBusca = 0;
-            int.TryParse(Console.ReadLine(), out idBusca);
-
-            Produto? produtoParaExcluir = Produto.ListarPorId(idBusca);
-
-            if (produtoParaExcluir != null)
-            {
-                Produto.Deletar(produtoParaExcluir);
-                Console.WriteLine("Produto excluído com sucesso");
-            }
-            else
-            {
-
-                Console.WriteLine("Produto não encontrado");
-
-            }
-
-            Console.ReadKey();
-
         }
-
     }
+
 }
+
