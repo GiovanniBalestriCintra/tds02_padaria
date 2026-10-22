@@ -12,20 +12,19 @@ namespace backPadaria.Service
         public static void MenuMarca()
         {
             bool sair = false;
-
             while (!sair)
             {
-                Console.WriteLine("----- GESTÃO DE MARCAS -----");
-
+                Console.Clear();
+                Console.WriteLine("===== GESTÃO DE MARCAS ===== ");
                 Console.WriteLine("1 - Cadastrar Marca");
-                Console.WriteLine("2 - Listar Todas as Marcas");
-                Console.WriteLine("3 - Buscar Marca por Id");
+                Console.WriteLine("2 - Listar Todos as Marcas");
+                Console.WriteLine("3 - Buscar Marca por ID");
                 Console.WriteLine("4 - Atualizar Marca");
                 Console.WriteLine("5 - Excluir Marca");
-                Console.WriteLine("0 - Sair");
+                Console.WriteLine("0 - Sair do Programa");
 
-                Console.WriteLine("------------------------------");
-                Console.WriteLine("Digite uma opção: ");
+                Console.WriteLine(" =============================");
+                Console.Write("Digite uma opção: ");
 
                 string opcao = Console.ReadLine();
                 Console.Clear();
@@ -35,185 +34,270 @@ namespace backPadaria.Service
                     switch (opcao)
                     {
                         case "1":
-                            CadastrarMarcaMenu();
-                            break;
-
+                            CadastrarMarca(); break;
                         case "2":
-                            ListarMarcasMenu();
-                            break;
-
+                            ListarMarcas(); break;
                         case "3":
-                            BuscarMarcaPorIdMenu();
-                            break;
-
+                            ListarMarcaPorId(); break;
                         case "4":
-                            AtualizarMarcaMenu();
-                            break;
-
+                            AtualizarMarca(); break;
                         case "5":
-                            ExcluirMarcaMenu();
-                            break;
-
+                            DeletarMarca(); break;
                         case "0":
                             sair = true;
-                            break;
+                            Console.WriteLine("Encerrando o programa..."); break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"\n[ERRO DE VALIDAÇÃO]: {ex.Message}");
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
 
-    
-        
-
-
-        private static void CadastrarMarcaMenu()
+        private static void CadastrarMarca()
         {
-            Console.WriteLine("----- CADASTRAR MARCA -----");
+            Console.WriteLine("-=-=-=-=-=- CADASTRAR MARCA -=-=-=-=-=-");
+            Console.Write("Digite o nome do Marca: ");
+            string nomeMarca = Console.ReadLine()!;
 
-            Console.WriteLine("Digite o nome da Marca: ");
-            string nomeMarca = Console.ReadLine();
-
-            Console.WriteLine("Digite o telefone da Marca: ");
-            string telefoneMarca = Console.ReadLine();
+            Console.Write("Digite o telefone do Marca: ");
+            string telMarca = Console.ReadLine()!;
 
 
-            Marca novaMarca = new Marca(nome: nomeMarca, telefone: telefoneMarca);
+            Marca novaMarca = new Marca(nome: nomeMarca, telefone: telMarca
+            );
 
-            int resultadoDoInsert = Marca.Inserir(novaMarca);
+            int resultadoInsert = Marca.Inserir(novaMarca);
             Console.Clear();
 
-            if (resultadoDoInsert > 0)
-            {
-                Console.WriteLine("Marca cadastrado com sucesso. ");
-            }
-
+            if (resultadoInsert > 0)
+                Console.WriteLine($"Marca cadastrada com sucesso!!");
+            VoltarParaOMenu();
         }
-
-
-
-
-        private static void ListarMarcasMenu()
+        private static void ListarMarcas()
         {
-
-            Console.WriteLine("----- LISTA DE MARCAS -----");
+            Console.WriteLine("------ LISTA DE MARCAS ------");
 
             List<Marca> lista = Marca.ListarTodos();
 
             if (lista.Count == 0)
             {
-                Console.WriteLine("Nenhuma Marca cadastrado no sistema.");
+                Console.WriteLine("Nenhuma marca cadastrada no sistema!");
             }
+
             else
             {
-                foreach (var marca in lista)
+                foreach (var m in lista)
                 {
-                    Console.WriteLine($"ID: {marca.Id} ");
-                    Console.WriteLine($"Nome: {marca.Nome}");
-                    Console.WriteLine($"Telefone: {marca.Telefone}");
+                    Console.WriteLine($"ID: {m.Id} | Nome: {m.Nome} | Tel: {m.Telefone}");
                 }
             }
 
-            Console.WriteLine("\nPressione uma tecla para continuar...");
-            Console.ReadKey();
-            Console.Clear();
+            VoltarParaOMenu();
+        }
+        private static void ListarMarcaPorId()
+        {
+            int idMarca;
+            Marca? marca = null;
 
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("------ BUSCAR MARCA POR ID ------");
+                Console.Write("\nDigite o [ID] (ou 0 para sair): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idMarca))
+                {
+                    Console.WriteLine("\n[ERROR] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o início do while
+                }
+
+                // Permite ao usuário desistir e voltar ao menu
+                if (idMarca == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                marca = Marca.ListarPorId(idMarca);
+
+                if (marca == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhuma marca encontrada com esse ID no sistema!");
+                    PressionarParaTentarNovamente();
+                    // Como fornecedor continua null, o loop continuará
+                }
+
+                Console.WriteLine($"\nID: {marca.Id} | Nome: {marca.Nome} | Tel: {marca.Telefone}");
+
+                Console.WriteLine("\n--------------------------------");
+                Console.WriteLine("1 - Buscar outra marca");
+                Console.WriteLine("0 - Voltar ao menu principal");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine()!;
+
+                if (opcao == "0")
+                {
+                    VoltarParaOMenu();
+                    return; // Sai do método e encerra
+                }
+                // Se digitar qualquer outra coisa ou "1", o loop `while (true)` roda de novo e limpa a tela para a próxima busca!
+            }
+        }
+        private static void AtualizarMarca()
+        {
+            int idMarca;
+            Marca? marca = null;
+
+            // Loop que continuará rodando enquanto a marca não for encontrada
+            while (marca == null)
+            {
+                Console.Clear();
+                Console.WriteLine("------ ATUALIZAR MARCA ------");
+                Console.Write("Digite o [ID] (ou 0 para sair): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idMarca))
+                {
+                    Console.WriteLine("\n[ERROR] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o início do while
+                }
+
+                // Permite ao usuário desistir e voltar ao menu
+                if (idMarca == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                marca = Marca.ListarPorId(idMarca);
+
+                if (marca == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhum marca encontrado com esse ID no sistema!");
+                    PressionarParaTentarNovamente();
+                    // Como marca continua null, o loop continuará
+                }
+            }
+
+            // Se chegou aqui, a marca foi encontrada com sucesso!
+            Console.WriteLine($"\nID: {marca.Id} | Nome: {marca.Nome} | Tel: {marca.Telefone}");
+
+            Console.WriteLine("\n-- O QUE VOCÊ DESEJA ALTERAR? --");
+            Console.WriteLine("1 - Nome da Marca");
+            Console.WriteLine("2 - Telefone da Marca");
+            Console.WriteLine("0 - Cancelar");
+            Console.Write("Escolha uma opção: ");
+
+            string opcao = Console.ReadLine()!;
+            bool alterado = true;
+
+            switch (opcao)
+            {
+                case "1":
+                    Console.Write("Novo Nome: ");
+                    marca.Nome = Console.ReadLine()!;
+                    break;
+
+                case "2":
+                    Console.Write("Novo Telefone: ");
+                    marca.Telefone = Console.ReadLine()!;
+                    break;
+
+                case "0":
+                    Console.WriteLine("Operação cancelada.");
+                    alterado = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Opção inválida!");
+                    alterado = false;
+                    break;
+            }
+
+            if (alterado)
+            {
+                int resultado = Marca.Atualizar(marca);
+
+                if (resultado > 0)
+                    Console.WriteLine("\nMarca atualizada com sucesso!");
+                else
+                    Console.WriteLine("\nErro ao atualizar a marca no banco de dados.");
+            }
+
+            VoltarParaOMenu();
+        }
+        private static void DeletarMarca()
+        {
+            int idMarca;
+            Marca? marca = null;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("------ EXCLUINDO MARCA ------");
+                Console.Write("\nDigite o [ID] (ou 0 para cancelar): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idMarca))
+                {
+                    Console.WriteLine("\n[ERRO] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o topo do loop
+                }
+
+                if (idMarca == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                marca = Marca.ListarPorId(idMarca);
+
+                if (marca == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhum marca encontrado no sistema!");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o topo do loop
+                }
+
+                Console.WriteLine($"\nMarca encontrada: ID: {marca.Id} | Nome: {marca.Nome}");
+                Console.Write("\nTem certeza que deseja excluir este fornecedor? (S/N): ");
+                //Trim remove espaços e ToUpper joga tudo pra maiuscula
+                string confirmacao = Console.ReadLine()!.Trim().ToUpper();
+
+                if (confirmacao == "S")
+                {
+                    Marca.Deletar(marca);
+                    Console.WriteLine("\nMarca excluída com sucesso!");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("\nExclusão cancelada pelo usuário.");
+                    PressionarParaTentarNovamente();
+                }
+            }
+
+            VoltarParaOMenu();
         }
 
-
-
-
-        public static void BuscarMarcaPorIdMenu()
+        //Perfumaria
+        private static void VoltarParaOMenu()
         {
-
-            Console.WriteLine("----- BUSCAR MARCA POR ID -----");
-
-            int.TryParse(Console.ReadLine(), out int idMarca);
-
-            Marca marca = Marca.ListarPorId(idMarca);
-
-            if (idMarca != null)
-            {
-                Console.WriteLine($"ID: {marca.Id}");
-                Console.WriteLine($"Nome: {marca.Nome}");
-                Console.WriteLine($"Telefone: {marca.Telefone}");
-            }
-            else
-            {
-                Console.WriteLine("Cliente não encontrado. ");
-            }
-
-            Console.WriteLine("\nPressione uma tecla para continuar...");
+            Console.Write("\nPressione qualquer tecla para voltar ao menu principal:");
             Console.ReadKey();
             Console.Clear();
-
         }
 
-
-
-        private static void AtualizarMarcaMenu()
+        // Método auxiliar apenas para pausar antes de limpar a tela no loop
+        private static void PressionarParaTentarNovamente()
         {
-            Console.WriteLine("----- ATUALIZAR MARCA POR ID -----");
-            Console.WriteLine("Digite o id do cliente que deseja atualizar: ");
-
-            int idBusca = 0;
-            int.TryParse(Console.ReadLine(), out idBusca);
-            Console.WriteLine($"-------> {idBusca}");
-
-            Marca marcaParaAtualizar = Marca.ListarPorId(idBusca);
-
-            if (marcaParaAtualizar != null)
-            {
-                Console.WriteLine($"Atualizar dados de {marcaParaAtualizar.Nome}");
-                Console.WriteLine("Pressione ENTER sem digitar nada para manter os dados atuais ");
-                Console.WriteLine($"Novo Telefone: Atual ({marcaParaAtualizar.Telefone} )");
-
-                string novoTelefone = Console.ReadLine();
-                if (!string.IsNullOrEmpty(novoTelefone)) marcaParaAtualizar.Telefone = novoTelefone;
-
-            }
-            else
-            {
-                Console.WriteLine("Marca não encontrado");
-            }
-
-            Console.WriteLine("\nPressione uma tecla para continuar...");
+            Console.Write("\nPressione qualquer tecla para tentar novamente...");
             Console.ReadKey();
-            Console.Clear();
-
-        } // FIM ATUALIZAR CLIENTE
-
-
-        private static void ExcluirMarcaMenu()
-        {
-
-            Console.WriteLine("----- EXCLUIR MARCA POR ID -----");
-            Console.WriteLine("Digite o id da Marca que deseja excluir");
-
-            int idBusca = 0;
-            int.TryParse(Console.ReadLine(), out idBusca);
-
-            Marca? marcaParaExcluir = Marca.ListarPorId(idBusca);
-
-            if (marcaParaExcluir != null)
-            {
-                Marca.Deletar(marcaParaExcluir);
-                Console.WriteLine("Marca excluída com sucesso");
-            }
-            else
-            {
-
-                Console.WriteLine("Marca não encontrado");
-
-            }
-
-            Console.ReadKey();
-
         }
-
     }
 }
 

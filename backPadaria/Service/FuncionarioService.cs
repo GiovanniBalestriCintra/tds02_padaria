@@ -13,20 +13,19 @@ namespace backPadaria.Service
         public static void MenuFuncionario()
         {
             bool sair = false;
-
             while (!sair)
             {
-                Console.WriteLine("----- GESTÃO DE FUNCIONARIO -----");
-
-                Console.WriteLine("1 - Cadastrar Funcionario");
+                Console.Clear();
+                Console.WriteLine("===== GESTÃO DE FUNCIONARIOS ===== ");
+                Console.WriteLine("1 - Cadastrar Funcionaio");
                 Console.WriteLine("2 - Listar Todos os Funcionarios");
-                Console.WriteLine("3 - Buscar Funcionario por Id");
+                Console.WriteLine("3 - Buscar Funcionario por ID");
                 Console.WriteLine("4 - Atualizar Funcionario");
                 Console.WriteLine("5 - Excluir Funcionario");
                 Console.WriteLine("0 - Sair do Programa");
 
-                Console.WriteLine("------------------------------");
-                Console.WriteLine("Digite uma opção: ");
+                Console.WriteLine(" =============================");
+                Console.Write("Digite uma opção: ");
 
                 string opcao = Console.ReadLine();
                 Console.Clear();
@@ -35,177 +34,279 @@ namespace backPadaria.Service
                 {
                     switch (opcao)
                     {
-                        case "1": // Cadastrar
-                            CadastrarFuncionarioMenu();
-                            break;
-
-                        case "2": // Listar
-                            ListarFuncionariosMenu();
-                            break;
-
-                        case "3": // Buscar
-                            BuscarFuncionarioPorIdMenu();
-                            break;
-
-                        case "4": // Atualizar
-                            AtualizarFuncionarioMenu();
-                            break;
-
-                        case "5": // Excluir
-                            ExcluirFuncionarioMenu();
-                            break;
-
-                        
+                        case "1":
+                            CadastrarFuncionario(); break;
+                        case "2":
+                            ListarFuncionarios(); break;
+                        case "3":
+                            ListarFuncionarioPorId(); break;
+                        case "4":
+                            AtualizarFuncionario(); break;
+                        case "5":
+                            DeletarFuncionario(); break;
+                        case "0":
+                            sair = true;
+                            Console.WriteLine("Encerrando o programa..."); break;
                     }
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
-                    Console.WriteLine($"\n[ERRO DE VALIDAÇÂO] {ex.Message}");
+                    Console.WriteLine(ex.ToString());
                 }
             }
-
-        } // FIM MENU
-
-
-        private static void CadastrarFuncionarioMenu()
-        {
-            Console.WriteLine("----- CADASTRAR FUNCIONARIO -----");
-
-            Console.WriteLine("Digite o nome do Funcionario: ");
-            string nomeFuncionario = Console.ReadLine();
-
-            Console.WriteLine("Digite o CPF do Funcionario: ");
-            string cpfFuncionario = Console.ReadLine();
-
-            Console.WriteLine("Digite o cargo do Funcionario: ");
-            string cargoFuncionario = Console.ReadLine();
-
-            Funcionario novoFuncionario = new Funcionario(nome: nomeFuncionario, cpf: cpfFuncionario, cargo: cargoFuncionario);
-
-            int resultadoDoInsert = Funcionario.Inserir(novoFuncionario);
-            Console.Clear();
-
-            if (resultadoDoInsert > 0)
-            {
-                Console.WriteLine("Funcionario cadastrado com sucesso. ");
-            }
-
         }
 
-
-        private static void ListarFuncionariosMenu()
+        private static void CadastrarFuncionario()
         {
-            Console.WriteLine("----- LISTA DE FUNCIONARIOS -----");
+            Console.WriteLine("-=-=-=-=-=- CADASTRAR Funcionario -=-=-=-=-=-");
+            Console.Write("Digite o nome do Funcionario: ");
+            string nomeFuncionario = Console.ReadLine()!;
+
+            Console.Write("Digite o cpf do Funcionario: ");
+            string cpfFuncionario = Console.ReadLine()!;
+
+            Console.Write("Digite o cargo do Funcionario: ");
+            string cargoFuncionario = Console.ReadLine()!;
+
+            Funcionario novoFuncionario = new Funcionario(nome: nomeFuncionario, cpf: cpfFuncionario, cargo: cargoFuncionario
+            );
+
+            int resultadoInsert = Funcionario.Inserir(novoFuncionario);
+            Console.Clear();
+
+            if (resultadoInsert > 0)
+                Console.WriteLine($"Funcionario cadastrado com sucesso!!");
+            VoltarParaOMenu();
+        }
+        private static void ListarFuncionarios()
+        {
+            Console.WriteLine("------ LISTA DE Funcionarios ------");
 
             List<Funcionario> lista = Funcionario.ListarTodos();
 
             if (lista.Count == 0)
             {
-                Console.WriteLine("Nenhum funcionario cadastrado no sistema. ");
+                Console.WriteLine("Nenhum funcionario cadastrado no sistema!");
             }
+
             else
             {
-                foreach (var funcionario in lista)
+                foreach (var f in lista)
                 {
-                    Console.WriteLine($"ID: {funcionario.Id}");
-                    Console.WriteLine($"Nome: {funcionario.Nome}");
-                    Console.WriteLine($"CPF: {funcionario.Cpf}");
-                    Console.WriteLine($"Cargo: {funcionario.Cargo}");
+                    Console.WriteLine($"ID: {f.Id}");
+                    Console.WriteLine($"Nome: {f.Nome} - CPF: {f.Cpf} - Cargo: {f.Cargo}");
                 }
             }
 
-            Console.WriteLine("\nPressione uma tecla para continuar...");
+            VoltarParaOMenu();
+        }
+        private static void ListarFuncionarioPorId()
+        {
+            int idFunc;
+            Funcionario? funcionario = null;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("------ BUSCAR FUNCIONARIO POR ID ------");
+                Console.Write("\nDigite o [ID] (ou 0 para sair): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idFunc))
+                {
+                    Console.WriteLine("\n[ERROR] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o início do while
+                }
+
+                // Permite ao usuário desistir e voltar ao menu
+                if (idFunc == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                funcionario = Funcionario.ListarPorId(idFunc);
+
+                if (funcionario == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhum funcionario encontrado com esse ID no sistema!");
+                    PressionarParaTentarNovamente();
+                    // Como funcionario continua null, o loop continuará
+                }
+
+                Console.WriteLine($"\nID: {funcionario.Id} | Nome: {funcionario.Nome} | CPF: {funcionario.Cpf} | Cargo: {funcionario.Cargo}");
+
+                Console.WriteLine("\n--------------------------------");
+                Console.WriteLine("1 - Buscar outro funcionario");
+                Console.WriteLine("0 - Voltar ao menu principal");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine()!;
+
+                if (opcao == "0")
+                {
+                    VoltarParaOMenu();
+                    return; // Sai do método e encerra
+                }
+                // Se digitar qualquer outra coisa ou "1", o loop `while (true)` roda de novo e limpa a tela para a próxima busca!
+            }
+        }
+        private static void AtualizarFuncionario()
+        {
+            int idFunc;
+            Funcionario? funcionario = null;
+
+            // Loop que continuará rodando enquanto o cliente não for encontrado
+            while (funcionario == null)
+            {
+                Console.Clear();
+                Console.WriteLine("------ ATUALIZAR FUNCIONARIO ------");
+                Console.Write("Digite o [ID] (ou 0 para sair): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idFunc))
+                {
+                    Console.WriteLine("\n[ERROR] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o início do while
+                }
+
+                // Permite ao usuário desistir e voltar ao menu
+                if (idFunc == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                funcionario = Funcionario.ListarPorId(idFunc);
+
+                if (funcionario == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhum funcionario encontrado com esse ID no sistema!");
+                    PressionarParaTentarNovamente();
+                    // Como funcionario continua null, o loop continuará
+                }
+            }
+
+            // Se chegou aqui, o funcionario foi encontrado com sucesso!
+            Console.WriteLine($"\nID: {funcionario.Id} | Nome: {funcionario.Nome} | CPF: {funcionario.Cpf} | Cargo: {funcionario.Cargo}");
+
+            Console.WriteLine("\n-- O QUE VOCÊ DESEJA ALTERAR? --");
+            Console.WriteLine("1 - Nome do Funcionario");
+            Console.WriteLine("2 - Cpf");
+            Console.WriteLine("3 - Cargo");
+            Console.WriteLine("0 - Cancelar");
+            Console.Write("Escolha uma opção: ");
+
+            string opcao = Console.ReadLine()!;
+            bool alterado = true;
+
+            switch (opcao)
+            {
+                case "1":
+                    Console.Write("Novo Nome: ");
+                    funcionario.Nome = Console.ReadLine()!;
+                    break;
+
+                case "2":
+                    Console.Write("Novo CPF: ");
+                    funcionario.Cpf = Console.ReadLine()!;
+                    break;
+
+                case "3":
+                    Console.Write("Novo Cargo: ");
+                    funcionario.Cargo = Console.ReadLine()!;
+                    break;
+
+                case "0":
+                    Console.WriteLine("Operação cancelada.");
+                    alterado = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Opção inválida!");
+                    alterado = false;
+                    break;
+            }
+
+            if (alterado)
+            {
+                int resultado = Funcionario.Atualizar(funcionario);
+
+                if (resultado > 0)
+                    Console.WriteLine("\nFuncionario atualizado com sucesso!");
+                else
+                    Console.WriteLine("\nErro ao atualizar o funcionario no banco de dados.");
+            }
+
+            VoltarParaOMenu();
+        }
+        private static void DeletarFuncionario()
+        {
+            int idFunc;
+            Funcionario? funcionario = null;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("------ EXCLUINDO FUNCIONARIO ------");
+                Console.Write("\nDigite o [ID] (ou 0 para cancelar): ");
+
+                if (!int.TryParse(Console.ReadLine(), out idFunc))
+                {
+                    Console.WriteLine("\n[ERRO] ID inválido! Digite apenas números.");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o topo do loop
+                }
+
+                if (idFunc == 0)
+                {
+                    VoltarParaOMenu();
+                    return;
+                }
+
+                funcionario = Funcionario.ListarPorId(idFunc);
+
+                if (funcionario == null)
+                {
+                    Console.WriteLine("\n[ERRO] Nenhum funcionario encontrado no sistema!");
+                    PressionarParaTentarNovamente();
+                    continue; // Volta para o topo do loop
+                }
+
+                Console.WriteLine($"\nFuncionario encontrado: ID: {funcionario.Id} | Nome: {funcionario.Nome}");
+                Console.Write("\nTem certeza que deseja excluir este funcionario? (S/N): ");
+                //Trim remove espaços e ToUpper joga tudo pra maiuscula
+                string confirmacao = Console.ReadLine()!.Trim().ToUpper();
+
+                if (confirmacao == "S")
+                {
+                    Funcionario.Deletar(funcionario);
+                    Console.WriteLine("\nFuncionario excluído com sucesso!");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("\nExclusão cancelada pelo usuário.");
+                    PressionarParaTentarNovamente();
+                }
+            }
+
+            VoltarParaOMenu();
+        }
+
+        //Perfumaria
+        private static void VoltarParaOMenu()
+        {
+            Console.Write("\nPressione qualquer tecla para voltar ao menu principal:");
             Console.ReadKey();
             Console.Clear();
-
         }
 
-        public static void BuscarFuncionarioPorIdMenu()
+        // Método auxiliar apenas para pausar antes de limpar a tela no loop
+        private static void PressionarParaTentarNovamente()
         {
-            Console.WriteLine("----- BUSCAR FUNCIONARIO POR ID -----");
-
-            int.TryParse( Console.ReadLine(), out int idFuncionario);
-
-            Funcionario funcionario = Funcionario.ListarPorId(idFuncionario);
-
-            if (idFuncionario != null)
-            {
-                Console.WriteLine($"ID: {funcionario.Id}");
-                Console.WriteLine($"Nome: {funcionario.Nome}");
-                Console.WriteLine($"CPF: {funcionario.Cpf}");
-                Console.WriteLine($"Cargo: {funcionario.Cargo}");
-            }
-            else
-            {
-                Console.WriteLine("Funcionario não encontrado.");
-            }
-
-            Console.WriteLine("\nPressione uma tecla para continuar...");
+            Console.Write("\nPressione qualquer tecla para tentar novamente...");
             Console.ReadKey();
-            Console.Clear();
-
         }
-
-        public static void AtualizarFuncionarioMenu()
-        {
-
-            Console.WriteLine("----- ATUALIZAR CLIENTE POR ID -----");
-            Console.WriteLine("Digite o id do funcionario que deseja atualizar: ");
-
-            int idBusca = 0;
-            int.TryParse ( Console.ReadLine(), out idBusca);
-            Console.WriteLine($"-------> {idBusca}");
-
-            Funcionario funcionarioParaAtualizar = Funcionario.ListarPorId(idBusca);
-
-            if (funcionarioParaAtualizar != null)
-            {
-                Console.WriteLine($"Atualizar dados de {funcionarioParaAtualizar.Nome}");
-                Console.WriteLine("Pressione ENTER sem digitar nada para manter os dados atuais ");
-                Console.WriteLine($"Novo Endereço: Atual ({funcionarioParaAtualizar.Cargo}");
-
-                string novoCargo = Console.ReadLine();
-                if (!string.IsNullOrEmpty(novoCargo)) funcionarioParaAtualizar.Cargo = novoCargo;
-
-                int resultadoAtualizacao = Funcionario.Atualizar(funcionarioParaAtualizar);
-                if (resultadoAtualizacao > 0) Console.WriteLine("Funcionario atualizado com sucesso. ");
-            }
-            else
-            {
-                Console.WriteLine("Funcionario não encontrado. ");
-            }
-
-            Console.Clear();
-
-        }
-
-        private static void ExcluirFuncionarioMenu()
-        {
-            Console.WriteLine("----- EXCLUIR FUNCIONARIO POR ID -----");
-            Console.WriteLine("Digite o id do Funcionario que deseja excluir");
-
-            int idBusca = 0;
-            int.TryParse( Console.ReadLine(), out idBusca);
-
-            Funcionario? funcionarioParaExcluir = Funcionario.ListarPorId(idBusca);
-
-            if (funcionarioParaExcluir != null )
-            {
-                Funcionario.Deletar(funcionarioParaExcluir);
-                Console.WriteLine("Cliente excluído com sucesso");
-            }
-            else
-            {
-                Console.WriteLine("Funcionario não encontrado");
-            }
-
-            Console.ReadKey();
-
-        }
-
-
-
-
-
     }
 }
