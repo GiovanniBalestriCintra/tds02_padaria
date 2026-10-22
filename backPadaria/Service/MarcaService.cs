@@ -55,6 +55,8 @@ namespace backPadaria.Service
             }
         }
 
+
+
         private static void CadastrarMarca()
         {
             Console.WriteLine("-=-=-=-=-=- CADASTRAR MARCA -=-=-=-=-=-");
@@ -75,6 +77,8 @@ namespace backPadaria.Service
                 Console.WriteLine($"Marca cadastrada com sucesso!!");
             VoltarParaOMenu();
         }
+
+
         private static void ListarMarcas()
         {
             Console.WriteLine("------ LISTA DE MARCAS ------");
@@ -96,6 +100,8 @@ namespace backPadaria.Service
 
             VoltarParaOMenu();
         }
+
+
         private static void ListarMarcaPorId()
         {
             int idMarca;
@@ -147,6 +153,8 @@ namespace backPadaria.Service
                 // Se digitar qualquer outra coisa ou "1", o loop `while (true)` roda de novo e limpa a tela para a próxima busca!
             }
         }
+
+
         private static void AtualizarMarca()
         {
             int idMarca;
@@ -230,6 +238,8 @@ namespace backPadaria.Service
 
             VoltarParaOMenu();
         }
+
+
         private static void DeletarMarca()
         {
             int idMarca;
@@ -284,6 +294,8 @@ namespace backPadaria.Service
             VoltarParaOMenu();
         }
 
+
+
         //Perfumaria
         private static void VoltarParaOMenu()
         {
@@ -291,6 +303,8 @@ namespace backPadaria.Service
             Console.ReadKey();
             Console.Clear();
         }
+
+
 
         // Método auxiliar apenas para pausar antes de limpar a tela no loop
         private static void PressionarParaTentarNovamente()

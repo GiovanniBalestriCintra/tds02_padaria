@@ -62,7 +62,7 @@ namespace backPadaria.Service
 
             private static void CadastrarCliente()
             {
-                Console.WriteLine("-=-=-=-=-=- CADASTRAR CLIENTE -=-=-=-=-=-");
+                Console.WriteLine("------ CADASTRAR CLIENTE ------");
                 Console.Write("Digite o nome do cliente: ");
                 string nomeCliente = Console.ReadLine()!;
 
@@ -90,6 +90,9 @@ namespace backPadaria.Service
                     Console.WriteLine($"Cliente cadastrado com sucesso!!");
                 VoltarParaOMenu();
             }
+
+
+
             private static void ListarClientes()
             {
                 Console.WriteLine("------ LISTA DE CLIENTES ------");
@@ -112,6 +115,9 @@ namespace backPadaria.Service
 
                 VoltarParaOMenu();
             }
+
+
+
             private static void ListarClientePorId()
             {
                 int idCli;
@@ -164,6 +170,8 @@ namespace backPadaria.Service
                     // Se digitar qualquer outra coisa ou "1", o loop `while (true)` roda de novo e limpa a tela para a próxima busca!
                 }
             }
+
+
             private static void AtualizarCliente()
             {
                 int idCli;
@@ -267,6 +275,8 @@ namespace backPadaria.Service
 
                 VoltarParaOMenu();
             }
+
+
             private static void DeletarCliente()
             {
                 int idCli;
@@ -320,6 +330,8 @@ namespace backPadaria.Service
 
                 VoltarParaOMenu();
             }
+
+
             private static void VisualizarPontuacao()
             {
                 Console.WriteLine("------ PONTUAÇÃO DOS CLIENTES ------");
@@ -393,6 +405,8 @@ namespace backPadaria.Service
                 VoltarParaOMenu();
             }
 
+
+
             //Perfumaria
             private static void VoltarParaOMenu()
             {
@@ -400,6 +414,8 @@ namespace backPadaria.Service
                 Console.ReadKey();
                 Console.Clear();
             }
+
+
 
             // Método auxiliar apenas para pausar antes de limpar a tela no loop
             private static void PressionarParaTentarNovamente()

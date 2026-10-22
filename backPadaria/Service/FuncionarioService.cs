@@ -56,6 +56,8 @@ namespace backPadaria.Service
             }
         }
 
+
+
         private static void CadastrarFuncionario()
         {
             Console.WriteLine("-=-=-=-=-=- CADASTRAR Funcionario -=-=-=-=-=-");
@@ -78,6 +80,8 @@ namespace backPadaria.Service
                 Console.WriteLine($"Funcionario cadastrado com sucesso!!");
             VoltarParaOMenu();
         }
+
+
         private static void ListarFuncionarios()
         {
             Console.WriteLine("------ LISTA DE Funcionarios ------");
@@ -100,6 +104,9 @@ namespace backPadaria.Service
 
             VoltarParaOMenu();
         }
+
+
+
         private static void ListarFuncionarioPorId()
         {
             int idFunc;
@@ -151,6 +158,8 @@ namespace backPadaria.Service
                 // Se digitar qualquer outra coisa ou "1", o loop `while (true)` roda de novo e limpa a tela para a próxima busca!
             }
         }
+
+
         private static void AtualizarFuncionario()
         {
             int idFunc;
@@ -240,6 +249,8 @@ namespace backPadaria.Service
 
             VoltarParaOMenu();
         }
+
+
         private static void DeletarFuncionario()
         {
             int idFunc;
@@ -294,6 +305,8 @@ namespace backPadaria.Service
             VoltarParaOMenu();
         }
 
+
+
         //Perfumaria
         private static void VoltarParaOMenu()
         {
@@ -301,6 +314,8 @@ namespace backPadaria.Service
             Console.ReadKey();
             Console.Clear();
         }
+
+
 
         // Método auxiliar apenas para pausar antes de limpar a tela no loop
         private static void PressionarParaTentarNovamente()
