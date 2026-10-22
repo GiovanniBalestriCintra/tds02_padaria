@@ -35,7 +35,7 @@ namespace backPadaria.Model
             this.Cpf = cpf;
             this.Telefone = telefone;
             this.Endereco = endereco;
-            this.Pontos = pontos;
+            this.Pontos = pontos; //aaa
         }
 
         // Gambiarra para testar
