@@ -60,7 +60,7 @@ namespace backPadaria.Service
 
         private static void CadastrarProduto()
         {
-            Console.WriteLine("-=-=-=-=-=- CADASTRAR PRODUTO -=-=-=-=-=-");
+            Console.WriteLine("-=-=-=-=-=- CADASTRAR PRODUTO -=-=-=-=-=-\n");
             Console.Write("Digite o Nome do produto: ");
             string nomeProduto = Console.ReadLine()!;
 
@@ -83,8 +83,15 @@ namespace backPadaria.Service
             Console.Clear();
 
             if (resultadoInsert > 0)
+            {
                 Console.WriteLine($"Produto cadastrado com sucesso!!");
-            VoltarParaOMenu();
+            }
+            else
+            {
+                Console.WriteLine($"Não fio possivel cadastrar o Produto.");
+            }
+
+                VoltarParaOMenu();
         }
 
 
