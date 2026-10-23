@@ -7,157 +7,151 @@ using System.Threading.Tasks;
 
 namespace backPadaria.Model
 {
-    internal class ProdFabricado
-    {
 
+    internal class ProdutoFabricado : Produto
+    {
         private int produtoId;
         private string descricaoProducao;
 
+        // Construtor completo: Recebe os atributos do Pai (Produto) e do Filho (ProdutoFabricado)
+        // O "base(...)" envia os dados correspondentes para o construtor da classe Produto
+        public ProdutoFabricado(int id, string nome, decimal preco, string categoria, bool fabricado, int marcaId, int produtoId, string descricaoProducao)
+            : base(id, nome, preco, categoria, fabricado, marcaId)
+        {
+            if (string.IsNullOrWhiteSpace(descricaoProducao))
+                throw new Exception("A descrição de produção não pode ser vazia");
+
+            this.ProdutoId = produtoId;
+            this.DescricaoProducao = descricaoProducao;
+        }
+
+
+
         public int ProdutoId { get => produtoId; set => produtoId = value; }
-        public string DescricaoProducao1 { get => descricaoProducao; set => descricaoProducao = value; }
+        public string DescricaoProducao { get => descricaoProducao; set => descricaoProducao = value; }
 
-
-        public ProdFabricado (int produtoId,  string descricaoProducao)
+        public static int Inserir(ProdutoFabricado produtoFabricado)
         {
-            this.produtoId = produtoId;
-            this.descricaoProducao = descricaoProducao;
-        }
+            // Nota: Este método assume que o Produto já foi criado na tabela 'Produto'
+            // e estamos apenas a registar a sua especialização na tabela 'ProdutoFabricado'.
+            string sql = "INSERT INTO `ProdutoFabricado` (`ProdutoId`, `DescricaoProducao`) VALUES (@ProdutoId, @DescricaoProducao)";
 
-        public ProdFabricado (string descricaoProducao)
-        {
-            this.descricaoProducao = descricaoProducao;
-        }
-
-
-        public static int Inserir(ProdFabricado prodFabricado)
-        {
-            // Instrução SQL: Define o comando de inserção (INSERT).
-            // 0 uso de marcações com '0' (ex: ONone) é una pratica de segurança crucial chanada de "Paranetrização".
-            // Ela impede ataques de SQL Injection, pois o banco entende o que e comando e o que e apenas texto do usuário.
-
-            string sql = "INSERT INTO `Prodfabricado` (`DescricaoProduto`) VALUES (@DescricaoProduto)";
-
-            // Gerenciamento de recursos: Cria o objeto de comando ja passando a instrução SQL.
-            // 0 'using' garante que os recursos de nemoria ocupados pelo comando sejam Liberados ao final do bloco.
             using (var cmd = new MySqlCommand(sql))
             {
-                // Vinculação de Dados: Pega as propriedades do objeto C# (cliente.Nome, cliente.cpf, etc.)
-                // e substitui de forna segura as narcacões '0' da string SQL com os valores reais,
-
-                cmd.Parameters.AddWithValue("@DescricaoProduto", prodFabricado.descricaoProducao);
-
-                // Execucão: Como o comando de INSERT nao retorna tabelas (apenas executa una ação),
-                // ele envia o comando configurado para o metodo generico 'executarComando' da classe 'Banco'.
-                // O metodo retorna 1 (se o usuario for inserido con sucesso) ou -1 (se houver erro no banco).
+                cmd.Parameters.AddWithValue("@ProdutoId", produtoFabricado.ProdutoId);
+                cmd.Parameters.AddWithValue("@DescricaoProducao", produtoFabricado.DescricaoProducao);
 
                 return Banco.ExecutarComando(cmd);
             }
         }
 
-        public static int Deletar(ProdFabricado prodFabricado)
+        public static int Deletar(ProdutoFabricado produtoFabricado)
         {
-            // String SQL
-            string sql = "DELETE FROM `ProdFabricado` WHERE `ID` = @ProdutoId";
+            // Apaga apenas o registo de fabrico (a especialização)
+            string sql = "DELETE FROM `ProdutoFabricado` WHERE `ProdutoId` = @ProdutoId";
 
             using (var cmd = new MySqlCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@ProdutoId", prodFabricado.produtoId);
-
+                cmd.Parameters.AddWithValue("@ProdutoId", produtoFabricado.ProdutoId);
                 return Banco.ExecutarComando(cmd);
             }
         }
 
-        public static List<ProdFabricado> ListarTodos()
+        public static List<ProdutoFabricado> ListarTodos()
         {
-            string sql = "SELECT * FROM `ProdFabricado`";
+            // O INNER JOIN junta as propriedades da classe Pai (Produto) com a classe Filho (ProdutoFabricado)
+            string sql = @"
+                SELECT 
+                    p.Id, p.Nome, p.Preco, p.Categoria, p.Fabricado, p.MarcaId,
+                    pf.ProdutoId, pf.DescricaoProducao
+                FROM 
+                    ProdutoFabricado pf
+                INNER JOIN 
+                    Produto p ON pf.ProdutoId = p.Id";
 
-            List<ProdFabricado> listaProdFabricados = new();
+            List<ProdutoFabricado> listaFabricados = new();
 
             using (var cmd = new MySqlCommand(sql))
             {
-
-                // Executa a leitura. 0 bloco 'using' aqui e FUNDAMENTAL para garantir que o
-                // reader seja fechado no final, o que por sua vez fecha a conexao com o banco.
                 using (MySqlDataReader reader = Banco.ExecutarComRetornoDeDados(cmd))
                 {
-
-                    // O while vai rodar uma vez para CADA Linha que existir na tabela Cliente
                     while (reader.Read())
                     {
+                        // Extrai dados do Produto (Pai)
+                        int id = reader.GetInt32("Id");
+                        string nome = validarCampo(reader["Nome"]);
+                        decimal preco = Convert.ToDecimal(reader["Preco"]);
+                        string categoria = validarCampo(reader["Categoria"]);
+                        bool fabricado = Convert.ToBoolean(reader["Fabricado"]);
+                        int marcaId = Convert.ToInt32(reader["MarcaId"]);
 
-                        // Extrai os dados da linha atual.
+                        // Extrai dados do ProdutoFabricado (Filho)
                         int produtoId = reader.GetInt32("ProdutoId");
-                        string descricaoProduto = ValidarCampo(reader["DescricaoProduto"]);
+                        string descricaoProducao = validarCampo(reader["DescricaoProducao"]);
 
-                        // Cria o objeto Cliente con os dados extraidos
-                        ProdFabricado prodFabricado = new ProdFabricado(produtoId, descricaoProduto);
-
-                        // Adiciona este cliente à nossa lista
-                        listaProdFabricados.Add(prodFabricado);
-
+                        // Cria o objeto completo
+                        ProdutoFabricado prodFabricado = new ProdutoFabricado(id, nome, preco, categoria, fabricado, marcaId, produtoId, descricaoProducao);
+                        listaFabricados.Add(prodFabricado);
                     }
-
                 }
-
-                // Retorna a lista completa (se a tabela estiver vazia, retorna uma lista con 0 itens)
-                return listaProdFabricados;
-
+                return listaFabricados;
             }
-
         }
 
-
-        public static ProdFabricado? ListarPorId(int produtoId)
+        public static ProdutoFabricado? listarPorId(int produtoIdPesquisa)
         {
-            string sql = "SELECT * FROM `ProdFabricado` WHERE `produtoId` = @ProdutoId";
+            string sql = @"
+                SELECT 
+                    p.Id, p.Nome, p.Preco, p.Categoria, p.Fabricado, p.MarcaId,
+                    pf.ProdutoId, pf.DescricaoProducao
+                FROM 
+                    ProdutoFabricado pf
+                INNER JOIN 
+                    Produto p ON pf.ProdutoId = p.Id
+                WHERE 
+                    pf.ProdutoId = @ProdutoId";
 
             using (var cmd = new MySqlCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@ProdutoId", produtoId);
-
+                cmd.Parameters.AddWithValue("@ProdutoId", produtoIdPesquisa);
                 MySqlDataReader reader = Banco.ExecutarComRetornoDeDados(cmd);
 
-                ProdFabricado prodFabricado = null;
+                ProdutoFabricado? prodFabricado = null;
 
                 while (reader.Read())
                 {
+                    int id = reader.GetInt32("Id");
+                    string nome = validarCampo(reader["Nome"]);
+                    decimal preco = Convert.ToDecimal(reader["Preco"]);
+                    string categoria = validarCampo(reader["Categoria"]);
+                    bool fabricado = Convert.ToBoolean(reader["Fabricado"]);
+                    int marcaId = Convert.ToInt32(reader["MarcaId"]);
 
-                    // Extrai os dados da linha atual.
-                    int produtoIdBanco = reader.GetInt32("Produtoid");
-                    string descricaoProduto = ValidarCampo(reader["DescricaoProdutos"]);
+                    int produtoId = reader.GetInt32("ProdutoId");
+                    string descricaoProducao = validarCampo(reader["DescricaoProducao"]);
 
-                    // Cria o objeto Cliente con os dados extraidos
-                    prodFabricado = new ProdFabricado(produtoId, descricaoProduto);
+                    prodFabricado = new ProdutoFabricado(id, nome, preco, categoria, fabricado, marcaId, produtoId, descricaoProducao);
                 }
-
                 return prodFabricado;
             }
         }
 
-        public static int Atualizar(ProdFabricado prodFabricado)
+        public static int Atualizar(ProdutoFabricado produtoFabricado)
         {
-            string sql = "UPDATE `Prodfabricado` SET `DescricaoProduto` = @DescricaoProduto";
+            // Atualiza apenas os dados específicos da especialização
+            string sql = "UPDATE `ProdutoFabricado` SET `DescricaoProducao` = @DescricaoProducao WHERE `ProdutoId` = @ProdutoId";
 
             using (var cmd = new MySqlCommand(sql))
             {
+                cmd.Parameters.AddWithValue("@DescricaoProducao", produtoFabricado.DescricaoProducao);
+                cmd.Parameters.AddWithValue("@ProdutoId", produtoFabricado.ProdutoId);
 
-                // Vinculacão de paranetros: Protege contra SQL Injection e organiza os dados
-                cmd.Parameters.AddWithValue("@DescricaoProduto", prodFabricado.descricaoProducao);
-
-                // A chave de busca: Quem sera atualizado?
-                cmd.Parameters.AddWithValue("@ProdutoId", prodFabricado.produtoId);
-
-                // Execução: 0 UPOATE tambén é uma instrução de ação (cono INSERT e DELETE).
-                // Ele vai retornar 1 (se encontrou o ID e atualizou con sucesso) ou 0 (se o ID nao existia).
                 return Banco.ExecutarComando(cmd);
-
             }
         }
 
-
-        private static string ValidarCampo(object campo)
+        private static string validarCampo(object campo)
         {
-
             if (campo == DBNull.Value || campo == null)
             {
                 return "";
@@ -165,12 +159,7 @@ namespace backPadaria.Model
             else
             {
                 return campo.ToString();
-
             }
-
-
         }
-
-
     }
 }
