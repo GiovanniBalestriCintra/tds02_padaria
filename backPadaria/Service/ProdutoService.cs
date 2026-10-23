@@ -91,7 +91,7 @@ namespace backPadaria.Service
                 Console.WriteLine($"Não fio possivel cadastrar o Produto.");
             }
 
-                VoltarParaOMenu();
+            VoltarParaOMenu();
         }
 
 
