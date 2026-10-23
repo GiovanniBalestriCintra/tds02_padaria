@@ -126,7 +126,7 @@ namespace backPadaria.Service
             int idConsole;
             int.TryParse(Console.ReadLine(), out idConsole);
 
-            ProdutoFabricado? registoBusca = ProdutoFabricado.ListarPorId(idConsole);
+            ProdutoFabricado? registoBusca = ProdutoFabricado.listarPorId(idConsole);
 
             if (registoBusca == null)
             {
@@ -157,7 +157,7 @@ namespace backPadaria.Service
             int idBusca = 0;
             int.TryParse(Console.ReadLine(), out idBusca);
 
-            ProdutoFabricado? registoParaAtualizar = ProdutoFabricado.ListarPorId(idBusca);
+            ProdutoFabricado? registoParaAtualizar = ProdutoFabricado.listarPorId(idBusca);
 
             if (registoParaAtualizar != null)
             {
@@ -191,7 +191,7 @@ namespace backPadaria.Service
             int idBusca = 0;
             int.TryParse(Console.ReadLine(), out idBusca);
 
-            ProdutoFabricado? registoParaExcluir = ProdutoFabricado.ListarPorId(idBusca);
+            ProdutoFabricado? registoParaExcluir = ProdutoFabricado.listarPorId(idBusca);
 
             if (registoParaExcluir != null)
             {

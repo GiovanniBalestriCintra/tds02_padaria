@@ -8,10 +8,16 @@ using System.Threading.Tasks;
 namespace backPadaria.Model
 {
 
+    // A classe herda de Produto (Especialização do diagrama)
     internal class ProdutoFabricado : Produto
     {
-        private int produtoId;
-        private string descricaoProducao;
+        private int _produtoId;
+        private string _descricaoProducao;
+
+
+        public int ProdutoId { get => _produtoId; set => _produtoId = value; }
+        public string DescricaoProducao { get => _descricaoProducao; set => _descricaoProducao = value; }
+
 
         // Construtor completo: Recebe os atributos do Pai (Produto) e do Filho (ProdutoFabricado)
         // O "base(...)" envia os dados correspondentes para o construtor da classe Produto
@@ -21,14 +27,17 @@ namespace backPadaria.Model
             if (string.IsNullOrWhiteSpace(descricaoProducao))
                 throw new Exception("A descrição de produção não pode ser vazia");
 
-            this.ProdutoId = produtoId;
-            this.DescricaoProducao = descricaoProducao;
+            this._produtoId = produtoId;
+            this._descricaoProducao = descricaoProducao;
         }
 
+        // Construtor apenas com os dados do filho (útil para inserções onde o Produto já existe)
+        public ProdutoFabricado(int produtoId, string descricaoProducao) : base(produtoId)
+        {
+            this._produtoId = produtoId;
+            this._descricaoProducao = descricaoProducao;
+        }
 
-
-        public int ProdutoId { get => produtoId; set => produtoId = value; }
-        public string DescricaoProducao { get => descricaoProducao; set => descricaoProducao = value; }
 
         public static int Inserir(ProdutoFabricado produtoFabricado)
         {

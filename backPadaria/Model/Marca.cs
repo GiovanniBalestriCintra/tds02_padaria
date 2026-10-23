@@ -10,26 +10,26 @@ namespace backPadaria.Model
     internal class Marca
     {
 
-        private int id;
-        private string nome;
-        private string telefone;
+        private int _id;
+        private string _nome;
+        private string _descricao;
 
-        public int Id { get => id; set => id = value; }
-        public string Nome { get => nome; set => nome = value; }
-        public string Telefone { get => telefone; set => telefone = value; }
+        public int Id { get => _id; set => _id = value; }
+        public string Nome { get => _nome; set => _nome = value; }
+        public string Descricao { get => _descricao; set => _descricao = value; }
 
 
-        public Marca (int id,  string nome, string telefone)
+        public Marca (int id,  string nome, string descricao)
         {
-            this.id = id;
-            this.nome = nome;
-            this.telefone = telefone;
+            this._id = id;
+            this._nome = nome;
+            this._descricao = descricao;
         }
 
-        public Marca (string nome, string telefone)
+        public Marca (string nome, string descricao)
         {
-            this.nome = nome;
-            this.telefone = telefone;
+            this._nome = nome;
+            this._descricao = descricao;
         }
 
         public static int Inserir(Marca marca)
@@ -48,7 +48,7 @@ namespace backPadaria.Model
                 // e substitui de forna segura as narcacões '0' da string SQL com os valores reais,
 
                 cmd.Parameters.AddWithValue("@Nome", marca.Nome);
-                cmd.Parameters.AddWithValue("@Telefone", marca.Telefone);
+                cmd.Parameters.AddWithValue("@Descricao", marca.Descricao);
 
                 // Execucão: Como o comando de INSERT nao retorna tabelas (apenas executa una ação),
                 // ele envia o comando configurado para o metodo generico 'executarComando' da classe 'Banco'.
@@ -65,7 +65,7 @@ namespace backPadaria.Model
 
             using (var cmd = new MySqlCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@id", marca.id);
+                cmd.Parameters.AddWithValue("@id", marca.Id);
 
                 return Banco.ExecutarComando(cmd);
             }
@@ -93,7 +93,7 @@ namespace backPadaria.Model
                         int id = reader.GetInt32("id");
 
                         string nome = ValidarCampo(reader["Nome"]);
-                        string telefone = ValidarCampo(reader["Telefone"]);
+                        string telefone = ValidarCampo(reader["Descricao"]);
 
 
                         // Cria o objeto Cliente con os dados extraidos
@@ -132,10 +132,10 @@ namespace backPadaria.Model
                     // Extrai os dados da linha atual.
                     int idMarca = reader.GetInt32("id");
                     string nome = ValidarCampo(reader["Nome"]);
-                    string telefone = ValidarCampo(reader["Telefone"]);
+                    string descricao = ValidarCampo(reader["Descricao"]);
 
-                    // Cria o objeto Cliente con os dados extraidos
-                    marca = new Marca(idMarca, nome, telefone);
+                    // Cria o objeto Cliente con os dados extraidosc
+                    marca = new Marca(idMarca, nome, descricao);
                 }
 
                 return marca;
@@ -144,17 +144,17 @@ namespace backPadaria.Model
 
         public static int Atualizar(Marca marca)
         {
-            string sql = "UPDATE `Marca` SET `Nome` = @Nome, `Telefone` = @Telefone WHERE `Id` = @Id";
+            string sql = "UPDATE `Marca` SET `Nome` = @Nome, `Descricao` = @Descricao WHERE `Id` = @Id";
 
             using (var cmd = new MySqlCommand(sql))
             {
 
                 // Vinculacão de paranetros: Protege contra SQL Injection e organiza os dados
                 cmd.Parameters.AddWithValue("@Nome", marca.Nome);
-                cmd.Parameters.AddWithValue("@Telefone", marca.Telefone);
+                cmd.Parameters.AddWithValue("@Descricao", marca.Descricao);
 
                 // A chave de busca: Quem sera atualizado?
-                cmd.Parameters.AddWithValue("@Id", marca.id);
+                cmd.Parameters.AddWithValue("@Id", marca.Id);
 
                 // Execução: 0 UPOATE tambén é uma instrução de ação (cono INSERT e DELETE).
                 // Ele vai retornar 1 (se encontrou o ID e atualizou con sucesso) ou 0 (se o ID nao existia).

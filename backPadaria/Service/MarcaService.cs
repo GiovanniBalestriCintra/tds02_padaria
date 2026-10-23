@@ -63,11 +63,11 @@ namespace backPadaria.Service
             Console.Write("Digite o nome do Marca: ");
             string nomeMarca = Console.ReadLine()!;
 
-            Console.Write("Digite o telefone do Marca: ");
-            string telMarca = Console.ReadLine()!;
+            Console.Write("Digite a Descrição da Marca: ");
+            string descricaoMarca = Console.ReadLine()!;
 
 
-            Marca novaMarca = new Marca(nome: nomeMarca, telefone: telMarca
+            Marca novaMarca = new Marca(nome: nomeMarca, descricao: descricaoMarca
             );
 
             int resultadoInsert = Marca.Inserir(novaMarca);
@@ -94,7 +94,7 @@ namespace backPadaria.Service
             {
                 foreach (var m in lista)
                 {
-                    Console.WriteLine($"ID: {m.Id} | Nome: {m.Nome} | Tel: {m.Telefone}");
+                    Console.WriteLine($"ID: {m.Id} | Nome: {m.Nome} | Tel: {m.Descricao}");
                 }
             }
 
@@ -136,7 +136,7 @@ namespace backPadaria.Service
                     // Como fornecedor continua null, o loop continuará
                 }
 
-                Console.WriteLine($"\nID: {marca.Id} | Nome: {marca.Nome} | Tel: {marca.Telefone}");
+                Console.WriteLine($"\nID: {marca.Id} | Nome: {marca.Nome} | Tel: {marca.Descricao}");
 
                 Console.WriteLine("\n--------------------------------");
                 Console.WriteLine("1 - Buscar outra marca");
@@ -196,7 +196,7 @@ namespace backPadaria.Service
 
             Console.WriteLine("\n-- O QUE VOCÊ DESEJA ALTERAR? --");
             Console.WriteLine("1 - Nome da Marca");
-            Console.WriteLine("2 - Telefone da Marca");
+            Console.WriteLine("2 - Descrição da Marca");
             Console.WriteLine("0 - Cancelar");
             Console.Write("Escolha uma opção: ");
 
@@ -211,8 +211,8 @@ namespace backPadaria.Service
                     break;
 
                 case "2":
-                    Console.Write("Novo Telefone: ");
-                    marca.Telefone = Console.ReadLine()!;
+                    Console.Write("Nova Descrição: ");
+                    marca.Descricao = Console.ReadLine()!;
                     break;
 
                 case "0":

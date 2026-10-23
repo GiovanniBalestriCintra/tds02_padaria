@@ -11,30 +11,30 @@ namespace backPadaria.Model
     internal class Funcionario
     {
 
-        private int id;
-        private string nome;
-        private string cpf;
-        private string cargo;
+        private int _id;
+        private string _nome;
+        private string _cpf;
+        private string _cargo;
 
-        public int Id { get => id; set => id = value; }
-        public string Nome { get => nome; set => nome = value; }
-        public string Cpf { get => cpf; set => cpf = value; }
-        public string Cargo { get => cargo; set => cargo = value; }
+        public int Id { get => _id; set => _id = value; }
+        public string Nome { get => _nome; set => _nome = value; }
+        public string Cpf { get => _cpf; set => _cpf = value; }
+        public string Cargo { get => _cargo; set => _cargo = value; }
 
 
         public Funcionario(int id, string nome, string cpf, string cargo)
         {
-            this.id = id;
-            this.nome = nome;
-            this.cpf = cpf;
-            this.cargo = cargo;
+            this._id = id;
+            this._nome = nome;
+            this._cpf = cpf;
+            this._cargo = cargo;
         }
 
         public Funcionario(string nome, string cpf, string cargo)
         {
-            this.nome = nome;
-            this.cpf = cpf;
-            this.cargo = cargo;
+            this._nome = nome;
+            this._cpf = cpf;
+            this._cargo = cargo;
         }
 
 
@@ -51,9 +51,9 @@ namespace backPadaria.Model
             {
                 // Vinculação de Dados: Pega as propriedades do objeto C# (cliente.Nome, cliente.cpf, etc.)
                 // e substitui de forna segura as narcacões '0' da string SQL com os valores reais,
-                cmd.Parameters.AddWithValue("@Nome", funcionario.nome);
-                cmd.Parameters.AddWithValue("@Cpf", funcionario.cpf);
-                cmd.Parameters.AddWithValue("@Cargo", funcionario.cargo);
+                cmd.Parameters.AddWithValue("@Nome", funcionario.Nome);
+                cmd.Parameters.AddWithValue("@Cpf", funcionario.Cpf);
+                cmd.Parameters.AddWithValue("@Cargo", funcionario.Cargo);
 
                 // Execucão: Como o comando de INSERT nao retorna tabelas (apenas executa una ação),
                 // ele envia o comando configurado para o metodo generico 'executarComando' da classe 'Banco'.
@@ -70,7 +70,7 @@ namespace backPadaria.Model
 
             using (var cmd = new MySqlCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@id", funcionario.id);
+                cmd.Parameters.AddWithValue("@id", funcionario.Id);
 
                 return Banco.ExecutarComando(cmd);
             }
@@ -176,12 +176,12 @@ namespace backPadaria.Model
             {
 
                 // Vinculacão de paranetros: Protege contra SQL Injection e organiza os 
-                cmd.Parameters.AddWithValue("@Nome", funcionario.nome);
-                cmd.Parameters.AddWithValue("@Cpf", funcionario.cpf);
-                cmd.Parameters.AddWithValue("@Cargo", funcionario.cargo);
+                cmd.Parameters.AddWithValue("@Nome", funcionario.Nome);
+                cmd.Parameters.AddWithValue("@Cpf", funcionario.Cpf);
+                cmd.Parameters.AddWithValue("@Cargo", funcionario.Cargo);
 
                 // A chave de busca: Quem sera atualizado?
-                cmd.Parameters.AddWithValue("@Id", funcionario.id);
+                cmd.Parameters.AddWithValue("@Id", funcionario.Id);
 
                 // Execução: 0 UPOATE tambén é uma instrução de ação (cono INSERT e DELETE).
                 // Ele vai retornar 1 (se encontrou o ID e atualizou con sucesso) ou 0 (se o ID nao existia).

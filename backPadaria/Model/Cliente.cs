@@ -11,53 +11,53 @@ namespace backPadaria.Model
     internal class Cliente
     {
 
-        private int id;
-        private string nome;
-        private string cpf;
-        private string telefone;
-        private string endereco;
-        private int pontos;
+        private int _id;
+        private string _nome;
+        private string _cpf;
+        private string _telefone;
+        private string _endereco;
+        private int _pontos;
 
-        public int Id { get => id; set => id = value; }
-        public string Nome { get => nome; set => nome = value; }
-        public string Cpf { get => cpf; set => cpf = value; }
-        public string Telefone { get => telefone; set => telefone = value; }
-        public string Endereco { get => endereco; set => endereco = value; }
-        public int Pontos { get => pontos; set => pontos = value; }
+        public int Id { get => _id; set => _id = value; }
+        public string Nome { get => _nome; set => _nome = value; }
+        public string Cpf { get => _cpf; set => _cpf = value; }
+        public string Telefone { get => _telefone; set => _telefone = value; }
+        public string Endereco { get => _endereco; set => _endereco = value; }
+        public int Pontos { get => _pontos; set => _pontos = value; }
 
         public Cliente(int id, string nome, string cpf, string telefone, string endereco, int pontos)
         {
 
             if (nome == "") throw new Exception("O nome do cliente não pode ser vazio.");
 
-            this.Id = id;
-            this.Nome = nome;
-            this.Cpf = cpf;
-            this.Telefone = telefone;
-            this.Endereco = endereco;
-            this.Pontos = pontos; //aaa
+            this._id = id;
+            this._nome = nome;
+            this._cpf = cpf;
+            this._telefone = telefone;
+            this._endereco = endereco;
+            this._pontos = pontos; //aaa
         }
 
         // Gambiarra para testar
         public Cliente(int id)
         {
-            this.Id = id;
+            this._id = id;
         }
 
 
         public Cliente(string nome, string cpf, string telefone, string endereco, int pontos)
         {
  
-            this.Nome = nome;
-            this.Cpf = cpf;
-            this.Telefone = telefone;
-            this.Endereco = endereco;
-            this.Pontos = pontos;
+            this._nome = nome;
+            this._cpf = cpf;
+            this._telefone = telefone;
+            this._endereco = endereco;
+            this._pontos = pontos;
         }
 
         public void AdicionarPontos(int pontos)
         {
-            this.Pontos += pontos;
+            this._pontos += pontos;
         }
 
 
@@ -97,7 +97,7 @@ namespace backPadaria.Model
 
             using (var cmd = new MySqlCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@id", cliente.id);
+                cmd.Parameters.AddWithValue("@id", cliente.Id);
 
                 return Banco.ExecutarComando(cmd);
             }
@@ -197,7 +197,7 @@ namespace backPadaria.Model
                 cmd.Parameters.AddWithValue("@Pontos", cliente.Pontos);
 
                 // A chave de busca: Quem sera atualizado?
-                cmd.Parameters.AddWithValue("@Id", cliente.id);
+                cmd.Parameters.AddWithValue("@Id", cliente.Id);
 
                 // Execução: 0 UPOATE tambén é uma instrução de ação (cono INSERT e DELETE).
                 // Ele vai retornar 1 (se encontrou o ID e atualizou con sucesso) ou 0 (se o ID nao existia).

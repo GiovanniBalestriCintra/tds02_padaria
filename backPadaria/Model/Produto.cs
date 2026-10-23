@@ -48,6 +48,11 @@ namespace backPadaria.Model
             this.id = id;
         }
 
+        public Produto (int id)
+        {
+            this.id = id;
+        }
+
 
 
         public static int Inserir(Produto produto)
