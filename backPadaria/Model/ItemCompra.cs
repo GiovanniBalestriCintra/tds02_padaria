@@ -17,7 +17,7 @@ namespace backPadaria.Model
         private int _quantidade;
         private decimal _precoCobrado;
 
-        // 
+        //
         public int Id { get => _id; set => _id = value; }
         public int CompraId { get => _compraId; set => _compraId = value; }
         public int ProdutoId { get => _produtoId; set => _produtoId = value; }
