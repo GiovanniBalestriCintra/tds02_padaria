@@ -18,6 +18,7 @@ namespace backPadaria.Model
         private string _endereco;
         private int _pontos;
 
+
         public int Id { get => _id; set => _id = value; }
         public string Nome { get => _nome; set => _nome = value; }
         public string Cpf { get => _cpf; set => _cpf = value; }
