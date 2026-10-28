@@ -127,10 +127,15 @@ namespace backPadaria
             //Funcionario.Inserir(funcionario1);
 
 
-            ClienteService.MenuCliente();
+            // ------------------------------------------------------------ //
 
-           
 
+            //LoginFuncionario login = new LoginFuncionario(2, "jp_padoca@padariapaoecia.com.br", "deumaoito", "Diretor");
+
+            //LoginFuncionario.Inserir(login);
+
+
+            LoginService.FazerLoginMenu();
 
         }
     }

@@ -12,7 +12,7 @@ namespace backPadaria
     public static class Banco
     {
 
-        private static string stringConexao = "Server=10.91.45.27;Port=3306;Database=padaria_bd;Uid=admin;Pwd=12345678";
+        private static string stringConexao = "Server=10.91.45.33;Port=3306;Database=padaria_bd;Uid=admin;Pwd=12345678";
 
 
         public static void ConnectAndTest()

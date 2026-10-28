@@ -192,7 +192,7 @@ namespace backPadaria.Service
             }
 
             // Se chegou aqui, a marca foi encontrada com sucesso!
-            Console.WriteLine($"\nID: {marca.Id} | Nome: {marca.Nome} | Tel: {marca.Telefone}");
+            Console.WriteLine($"\nID: {marca.Id} | Nome: {marca.Nome} | Tel: {marca.Descricao}");
 
             Console.WriteLine("\n-- O QUE VOCÊ DESEJA ALTERAR? --");
             Console.WriteLine("1 - Nome da Marca");
