@@ -21,6 +21,7 @@ namespace backPadaria.Model
         public DateTime DataHora { get => _dataHora; set => _dataHora = value; }
         public int FuncionarioId { get => _funcionarioId; set => _funcionarioId = value; }
         public int ClienteId { get => _clienteId; set => _clienteId = value; }
+        internal List<ItemCompra> Itens { get => _itens; set => _itens = value; }
 
 
         // Método Construtor sem ID.
@@ -48,7 +49,7 @@ namespace backPadaria.Model
 
             // Percorre todos os itens da coleção, calcula o subtotal de cada item
             // através do método CalcularSubtotal() e retorna a soma de todos eles.
-            return _itens.Sum(item => item.CalcularSubtotal());
+            return Itens.Sum(item => item.CalcularSubtotal());
 
 
             // OU
@@ -72,13 +73,13 @@ namespace backPadaria.Model
             if (produto == null) throw new Exception("Produto Inexistente");
 
             ItemCompra novoItem = new ItemCompra(produto.Id, quantidade, produto.Preco);
-            this._itens.Add(novoItem);
+            this.Itens.Add(novoItem);
         }
 
 
         public void RemoverItem(ItemCompra item)
         {
-            this._itens.Remove(item);
+            this.Itens.Remove(item);
         }
 
 

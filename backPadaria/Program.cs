@@ -134,9 +134,24 @@ namespace backPadaria
 
             //LoginFuncionario.Inserir(login);
 
+            VendaService.IniciarNovaVenda();
 
-            LoginService.FazerLoginMenu();
 
+
+            //while (true)
+            //{
+            //    ConsoleKeyInfo tecla = Console.ReadKey(true);
+
+            //    if(tecla.Key != ConsoleKey.LeftArrow)
+            //    {
+            //        Console.WriteLine("Apertou a tecla errada");
+            //    }
+            //    else
+            //    {
+            //        break;
+            //    }
+               
+            //}
         }
     }
 }

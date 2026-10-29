@@ -76,6 +76,8 @@ namespace backPadaria.Service
                 {
                     senha += tecla.KeyChar;
                     Console.Write("*"); // Exibe o asterisco no lugar do caractere
+
+                    //Console.WriteLine(senha);
                 }
             }
             return senha;
